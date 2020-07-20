@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+ 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!--
+  <ItemGroup>
+    <Compile Remove="Comp3.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Comp3.cs" />
+  </ItemGroup>
+-->
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Projections\Windows\Windows.csproj" />
+    <ProjectReference Include="..\WinRT.Runtime\WinRT.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>
