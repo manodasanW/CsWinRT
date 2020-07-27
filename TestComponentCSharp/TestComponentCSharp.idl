@@ -306,6 +306,10 @@ namespace TestComponentCSharp
 
         // Keyword escapes
         String Catch(String params, out String lock);
+
+        String MergeEntry(Windows.Foundation.IWwwFormUrlDecoderEntry value);
+        String TestComp(IInspectable factory);
+
     }
 
     [threading(sta), marshaling_behavior(standard)]

@@ -20,6 +20,8 @@ namespace WinRT
             {
                 return customMapping;
             }
+
+            type = type.GetRuntimeClassWrapperType() ?? type;
             var helper = $"ABI.{type.FullName}";
             return Type.GetType(helper) ?? type.Assembly.GetType(helper);
         }
@@ -59,6 +61,12 @@ namespace WinRT
         public static Type GetMarshalerType(this Type type)
         {
             return type.GetHelperType().GetMethod("CreateMarshaler", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).ReturnType;
+        }
+
+        public static Type GetRuntimeClassWrapperType(this Type type)
+        {
+            var wrapperTypeName = $"{type.Namespace}.Impl.{type.Name}";
+            return Type.GetType(wrapperTypeName, false) ?? type.Assembly.GetType(wrapperTypeName, false);
         }
 
         public static bool IsDelegate(this Type type)

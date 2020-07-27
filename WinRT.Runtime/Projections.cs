@@ -162,6 +162,7 @@ namespace WinRT
 
         private static bool IsTypeWindowsRuntimeTypeNoArray(Type type)
         {
+            type = type.GetRuntimeClassWrapperType() ?? type;
             if (type.IsConstructedGenericType)
             {
                 if(IsTypeWindowsRuntimeTypeNoArray(type.GetGenericTypeDefinition()))
@@ -228,6 +229,8 @@ namespace WinRT
 
         internal static bool TryGetDefaultInterfaceTypeForRuntimeClassType(Type runtimeClass, out Type defaultInterface)
         {
+            runtimeClass = runtimeClass.GetRuntimeClassWrapperType() ?? runtimeClass;
+
             defaultInterface = null;
             ProjectedRuntimeClassAttribute attr = runtimeClass.GetCustomAttribute<ProjectedRuntimeClassAttribute>();
             if (attr is null)

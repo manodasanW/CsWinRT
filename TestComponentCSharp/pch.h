@@ -9,3 +9,4 @@
 #include <winrt/Microsoft.UI.Xaml.Interop.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.Navigation.h>
+#include <winrt/Component.h>

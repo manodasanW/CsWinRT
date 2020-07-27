@@ -1,6 +1,7 @@
 ﻿using ABI.Component;
 using ABI.Component.Impl;
 using Component;
+using TestComponentCSharp;
 using System;
 using System.Diagnostics;
 using WinRT;
@@ -155,9 +156,25 @@ public class Program
             var comp7ObjectRef = ObjectReference<ABI.Component.Impl.IComp4.Vftbl>.Attach(ref comp7Ptr);
             comp7ObjectRef.Vftbl.GetNumber_0(comp7ObjectRef.ThisPtr, out result);
             Debug.Assert(result == 7);
+            // IWwwFormUrlDecoderEntry
+            var wwwFormObjectEntry = compObjectRef.As<ABI.Windows.Foundation.IWwwFormUrlDecoderEntry.Vftbl>();
+            wwwFormObjectEntry.Vftbl.get_Name_0(wwwFormObjectEntry.ThisPtr, out IntPtr stringPtr);
+            var str = MarshalString.FromAbi(stringPtr);
+            Debug.Assert(str == "8");
+            wwwFormObjectEntry.Vftbl.get_Value_1(wwwFormObjectEntry.ThisPtr, out stringPtr);
+            str = MarshalString.FromAbi(stringPtr);
+            Debug.Assert(str == "16");
+            // List
+            compObjectRef.Vftbl.GetList_2(compObjectRef.ThisPtr, out IntPtr listPtr);
+            var list = global::ABI.System.Collections.Generic.IList<global::Component.Comp5>.FromAbi(listPtr);
+            Debug.Assert(list.Count == 1);
+            Debug.Assert(list[0].GetPoint().X == 8);
+            compObjectRef.Vftbl.GetList_2(compObjectRef.ThisPtr, out listPtr);
+            list = global::ABI.System.Collections.Generic.IList<global::Component.Comp5>.FromAbi(listPtr);
+            Debug.Assert(list.Count == 2);
 
             // Consumption from C# caller side.
-            // Note the use of the original server component rather than a wrapper projected component.
+            // Note the use of the original component rather than a wrapper projected component.
             Component.Comp4 comp = new Component.Comp4();
             result = comp.GetNumber();
             Debug.Assert(result == 8);
@@ -175,6 +192,19 @@ public class Program
             var comp7 = new Component.Comp4(7);
             result = comp7.GetNumber();
             Debug.Assert(result == 7);
+            // IWwwFormUrlDecoderEntry
+            str = comp.Name;
+            Debug.Assert(str == "8");
+            str = comp.Value;
+            Debug.Assert(str == "16");
+
+            // Use C++/WinRT component to consume component and validate string constructed with results of function calls
+            Class cppClass = new Class();
+            str = cppClass.MergeEntry(comp);
+            Debug.Assert(str == "81624816");
+
+            str = cppClass.TestComp(IInspectable.FromAbi(activationPtr));
+            Debug.Assert(str == "4212212");
         }
 
     }

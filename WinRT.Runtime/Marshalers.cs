@@ -919,6 +919,7 @@ namespace WinRT
             {
                 return objRef.As<IInspectable.Vftbl>();
             }
+            o = ComWrappersSupport.GetRuntimeClassWrapperIfAny(o);
             using (var ccw = ComWrappersSupport.CreateCCWForObject(o))
             { 
                 return ccw.As<IInspectable.Vftbl>();
