@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+ 
+  <!--
+  <ItemGroup>
+    <Compile Remove="Comp3.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Comp3.cs" />
+  </ItemGroup>
+-->
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Projections\Test\Test.csproj" />
+    <ProjectReference Include="..\Projections\Windows\Windows.csproj" />
+    <ProjectReference Include="..\WinRT.Runtime\WinRT.Runtime.csproj" />
+    <PackageReference Include="Microsoft.VCRTForwarders.140" Version="1.0.6" />
+  </ItemGroup>
+  
+  <Target Name="FilterProjection" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <!--Remove references to projection source winmds to prevent compile conflict warnings-->
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" Condition="%(ReferencePathWithRefAssemblies.Filename) == 'TestComponent'" />
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" Condition="%(ReferencePathWithRefAssemblies.Filename) == 'TestComponentCSharp'" />
+      <!--Also remove ReferencePath winmds to prevent error NETSDK1130 false positive-->
+      <ReferencePath Remove="@(ReferencePath)" Condition="%(ReferencePath.Filename) == 'TestComponent'" />
+      <ReferencePath Remove="@(ReferencePath)" Condition="%(ReferencePath.Filename) == 'TestComponentCSharp'" />
+    </ItemGroup>
+  </Target>
+
+
+</Project>

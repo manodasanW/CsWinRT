@@ -111,6 +111,22 @@ namespace WinRT
             }
         }
 
+        internal static object GetRuntimeClassWrapperIfAny(object obj)
+        {
+            var type = obj.GetType();
+            var wrapperType = type.GetRuntimeClassWrapperType();
+            if (wrapperType == null)
+            {
+                return obj;
+            }
+            else
+            {
+                // Probably have some weak conditional table lookup before constructing new one.
+                var objReferenceConstructor = wrapperType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance | BindingFlags.Instance, null, new[] { type }, null);
+                return objReferenceConstructor.Invoke(new[] { obj });
+            }
+        }
+
         internal static List<ComInterfaceEntry> GetInterfaceTableEntries(object obj)
         {
             var entries = new List<ComInterfaceEntry>();

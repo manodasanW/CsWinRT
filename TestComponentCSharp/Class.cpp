@@ -432,6 +432,60 @@ namespace winrt::TestComponentCSharp::implementation
         _uriChanged.remove(token);
     }
 
+    // temporary code for demonstration purposes
+    hstring Class::MergeEntry(Windows::Foundation::IWwwFormUrlDecoderEntry const& value)
+    {
+        WCHAR buffer[MAX_PATH]{ 0 };
+        wcscat_s(buffer, value.Name().c_str());
+        wcscat_s(buffer, value.Value().c_str());
+
+        // Query the test interface to demonstrate the C# interface is implemented on the CCW
+        auto testInterface = value.as<Component::ITest4>();
+        int num = testInterface.GetTest();
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+
+        // default interface
+        auto defaultInterface = value.as<Component::IComp4>();
+        num = defaultInterface.GetNumber();
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+        num = defaultInterface.GetNumber2();
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+
+        return hstring(buffer);
+    }
+
+    hstring Class::TestComp(Windows::Foundation::IInspectable const& value)
+    {
+        WCHAR buffer[MAX_PATH]{ 0 };
+
+        // factory
+        auto factory = value.as<Component::IComp4Factory>();
+        auto comp = factory.CreateInstance(4);
+
+        auto num = comp.GetNumber();
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+
+        // statics
+        auto statics = factory.as<Component::IComp4Statics>();
+        num = statics.GetNum2Multiplier();
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+
+        auto comp12 = statics.GetComp12();
+        num = comp12.GetNumber();
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+
+        // List
+        auto compList = comp12.GetList();
+        compList = comp12.GetList();
+        wcscat_s(buffer, std::to_wstring(compList.Size()).c_str());
+
+        num = (int) compList.GetAt(0).GetPoint().X;
+        wcscat_s(buffer, std::to_wstring(num).c_str());
+
+        return hstring(buffer);
+    }
+
+
     IAsyncOperation<int32_t> Class::GetIntAsync()
     {
         co_return _int;

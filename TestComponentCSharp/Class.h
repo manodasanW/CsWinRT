@@ -311,6 +311,9 @@ namespace winrt::TestComponentCSharp::implementation
         void ReadWriteProperty(int32_t value);
         //hstring DistinctProperty();
         //void DistinctProperty(hstring const& value);
+
+        hstring MergeEntry(Windows::Foundation::IWwwFormUrlDecoderEntry const& value);
+        hstring TestComp(Windows::Foundation::IInspectable const& value);
     };
 }
 
